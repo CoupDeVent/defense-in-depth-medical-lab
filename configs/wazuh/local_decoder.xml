@@ -1,0 +1,10 @@
+<!-- Wazuh decoder for OPNsense filterlog messages (IPv4). -->
+<decoder name="opnsense-filterlog">
+  <program_name>^filterlog</program_name>
+</decoder>
+
+<decoder name="opnsense-filterlog-v4">
+  <parent>opnsense-filterlog</parent>
+  <regex type="pcre2">^[^,]*,[^,]*,[^,]*,[^,]*,([^,]+),[^,]*,(\w+),(\w+),4,[^,]*,[^,]*,\d+,\d+,\d+,[^,]*,\d+,(\w+),\d+,([\d.]+),([\d.]+)(?:,(\d+),(\d+))?</regex>
+  <order>interface,action,direction,protocol,srcip,dstip,srcport,dstport</order>
+</decoder>

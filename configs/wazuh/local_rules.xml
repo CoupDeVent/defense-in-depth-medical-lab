@@ -1,0 +1,43 @@
+<group name="local,opnsense,mediconnect,">
+
+  <!-- 100100: any packet blocked by the firewall -->
+  <rule id="100100" level="3">
+    <match>match,block,</match>
+    <description>MediConnect: packet blocked by the firewall ($(srcip) to $(dstip):$(dstport))</description>
+    <group>firewall_block,</group>
+  </rule>
+
+  <!-- 100101: 5 or more blocks in 60 s from the same source (scan) -->
+  <rule id="100101" level="10" frequency="5" timeframe="60">
+    <if_matched_sid>100100</if_matched_sid>
+    <same_srcip />
+    <description>MediConnect: 5+ blocks in 60 s from $(srcip) (scan or unauthorized access attempt)</description>
+    <mitre><id>T1046</id></mitre>
+    <group>scan,</group>
+  </rule>
+
+  <!-- 100102: a block on a VPN tunnel address = out-of-profile access -->
+  <rule id="100102" level="9">
+    <if_sid>100100</if_sid>
+    <srcip>10.8.0.0/24</srcip>
+    <description>MediConnect VPN: out-of-profile access denied for $(srcip) to $(dstip):$(dstport)</description>
+    <group>vpn,policy_violation,</group>
+  </rule>
+
+  <!-- 100110: OpenVPN authentication failure -->
+  <rule id="100110" level="7">
+    <if_sid>81800</if_sid>
+    <regex type="pcre2">SENT CONTROL \[(?!UNDEF)[^\]]+\]: 'AUTH_FAILED'</regex>
+    <description>MediConnect VPN: authentication failure</description>
+    <group>vpn,authentication_failed,</group>
+  </rule>
+
+  <!-- 100111: 3 VPN failures in 120 s (brute force) -->
+  <rule id="100111" level="12" frequency="3" timeframe="120">
+    <if_matched_sid>100110</if_matched_sid>
+    <description>MediConnect VPN: 3 authentication failures in 120 s (brute force attempt)</description>
+    <mitre><id>T1110</id></mitre>
+    <group>vpn,authentication_failures,</group>
+  </rule>
+
+</group>

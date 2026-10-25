@@ -1,0 +1,17 @@
+#!/usr/sbin/nft -f
+# Local firewall of the DMZ web host (defense in depth).
+# Default deny, only web from anywhere and SSH from the management zone.
+flush ruleset
+table inet filter {
+  chain input {
+    type filter hook input priority 0; policy drop;
+    ct state established,related accept
+    ct state invalid drop
+    iif lo accept
+    ip saddr 10.10.99.0/24 icmp type echo-request accept
+    ip saddr 10.10.99.0/24 tcp dport 22 accept
+    tcp dport { 80, 443 } accept
+  }
+  chain forward { type filter hook forward priority 0; policy drop; }
+  chain output  { type filter hook output priority 0; policy accept; }
+}
