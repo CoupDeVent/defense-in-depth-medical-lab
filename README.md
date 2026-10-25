@@ -4,7 +4,7 @@
 
 Nowadays, protecting health data has become a major concern for any online service. That is why this project secures the network of a fictitious medical appointment platform spread across two sites. It was built from end to end in VMware Workstation, around two OPNsense firewalls, an LDAP directory, a reverse proxy, an IPS and a SIEM. The goal was not to rebuild a full production system, but to show that each security requirement is answered by the simplest control that really satisfies it, and that the whole thing stays verifiable.
 
-This repository is based on a school project. The full deliverable is the written report, [report.pdf](report/report.pdf), and this repository reorganizes it as a portfolio around the infrastructure and the design choices.
+This repository is based on a school project. The full deliverable is the written report, [report.pdf](report.pdf), and this repository reorganizes it as a portfolio around the infrastructure and the design choices.
 
 > Lab proof of concept. All data is fictitious, addresses use documentation and private ranges (203.0.113.0/24 is TEST-NET-3, 10.0.0.0/8 is private), and no real secret is included. The lab domain is mediconnect.lab.
 
