@@ -27,37 +27,7 @@ The platform serves several populations that do not share the same needs, nor th
 
 The infrastructure is made of twelve virtual machines, spread across the headquarters, a branch site, and a simulated Internet. Each zone is an isolated VMware segment, connected to the others only through the firewall. Consequently, isolation is obtained by construction and not by VLAN tagging.
 
-```mermaid
-flowchart TB
-    subgraph INTERNET["Internet (simulated) 203.0.113.0/24"]
-        PAT["Patient / Doctor host"]
-        VPNC["Remote VPN host"]
-    end
-
-    subgraph HQ["Headquarters"]
-        HQFW["HQ-FW · OPNsense<br/>IPS · OpenVPN · CA"]
-        LAN["LAN 10.10.10.0/24<br/>Workstation"]
-        SRV["Servers 10.10.20.0/24<br/>LDAP · Apps"]
-        DMZ["DMZ 10.10.30.0/24<br/>Public portal"]
-        DEMO["DEMO 10.10.40.0/24<br/>Demo copy"]
-        MGMT["MGMT 10.10.99.0/24<br/>SIEM · Admin"]
-    end
-
-    subgraph BR["Branch site"]
-        BRFW["BR-FW · OPNsense"]
-        BRLAN["LAN 10.20.10.0/24<br/>Workstation"]
-    end
-
-    PAT -->|HTTPS 443| HQFW
-    VPNC -->|OpenVPN 1194/udp| HQFW
-    HQFW <-->|IPsec IKEv2| BRFW
-    HQFW --- LAN
-    HQFW --- SRV
-    HQFW --- DMZ
-    HQFW --- DEMO
-    HQFW --- MGMT
-    BRFW --- BRLAN
-```
+![Architecture: two sites linked by IPsec, isolated zones at headquarters](img/architecture.png)
 
 ### Zones and trust levels
 
